@@ -58,7 +58,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
     is_active = models.BooleanField(_("active"), default=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
-    is_admin = models.BooleanField(_("admin status"), default=False)
+    #is_admin = models.BooleanField(_("admin status"), default=False)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     objects = CustomUserManager()
@@ -106,3 +106,54 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         Simplest possible answer: All admins are staff
         """
         return self.is_staff
+    
+    
+class Profile(models.Model):
+    """
+    Profile model to store additional user information.
+    """
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
+    profile_image = models.ImageField(
+        _("profile image"), upload_to="profile_images/", blank=True, null=True
+    )
+    bio = models.TextField(_("bio"), blank=True, null=True)
+    phone_number = models.CharField(
+        _("phone number"), max_length=15, blank=True, null=True
+    )
+    website = models.URLField(_("website"), blank=True, null=True)
+    address = models.TextField(_("address"), blank=True, null=True)
+    date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+
+    def get_profile_image_url(self):
+        """
+        Returns the URL to the user's profile image or a default image.
+        """
+        if self.profile_image:
+            return self.profile_image.url
+        return "/static/images/default_profile.png"
+
+    def get_age(self):
+        """
+        Calculates and returns the user's age based on their date of birth.
+        """
+        if self.date_of_birth:
+            return timezone.now().year - self.date_of_birth.year
+        return None
+
+    def has_complete_profile(self):
+        """
+        Checks if the user's profile is complete.
+        """
+        required_fields = [
+            self.user.first_name,
+            self.user.last_name,
+            self.user.email,
+            self.user.username,
+        ]
+        return all(required_fields)
