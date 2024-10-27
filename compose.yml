@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   db:
@@ -34,8 +34,7 @@ services:
       - "8000:8000"
     command: >
       bash -c "wait-for-it db:5432 -s -t 0
-      && python manage.py collectstatic --noinput
-      && python manage.py migrate
+      && python manage.py collectstatic --noinput 
       && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
