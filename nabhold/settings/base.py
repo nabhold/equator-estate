@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     #Third-Party apps
     
     #Local apps
+    'home.apps.HomeConfig',
 ]
 
 
