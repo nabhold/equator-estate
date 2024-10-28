@@ -113,7 +113,7 @@ class Profile(models.Model):
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username}'s profile"
+        return f"{self.user.first_name} {self.user.last_name}'s profile"
 
     def get_profile_image_url(self):
         """
