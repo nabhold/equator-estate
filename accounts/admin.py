@@ -26,7 +26,7 @@ class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline,)
     model = User
     list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'is_active',)
-    list_filter = ('email', 'username', 'last_name','is_staff', 'is_active',)
+    list_filter = ('email', 'username', 'last_name','is_admin', 'is_active',)
     search_fields = ('email', 'username','first_name', 'last_name',)
     ordering = ('email',)
     

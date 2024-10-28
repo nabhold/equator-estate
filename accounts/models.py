@@ -47,18 +47,15 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom user model extending AbstractBaseUser and PermissionsMixin.
-    """
+    """Custom user model extending AbstractBaseUser and PermissionsMixin."""
 
     email = models.EmailField(_("email address"), unique=True)
-    username = models.CharField(_("username"), max_length=150, unique=True)
+    username = models.CharField(_("username"), max_length=150, unique=True, blank=True)
     first_name = models.CharField(_("first name"), max_length=30, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
     is_active = models.BooleanField(_("active"), default=True)
-    is_staff = models.BooleanField(_("staff status"), default=False)
-    #is_admin = models.BooleanField(_("admin status"), default=False)
+    is_admin = models.BooleanField(_("admin status"), default=False)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     objects = CustomUserManager()
@@ -74,40 +71,28 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_full_name(self):
-        """
-        Returns the user's full name.
-        """
+        """Returns the user's full name."""
         return f"{self.first_name} {self.last_name}"
 
     def get_short_name(self):
-        """
-        Returns the user's short name.
-        """
+        """Returns the user's short name."""
         return self.first_name
 
     def has_perm(self, perm, obj=None):
-        """
-        Does the user have a specific permission?
-        Simplest possible answer: Yes, always
-        """
+        """Does the user have a specific permission?"""
         return True
 
     def has_module_perms(self, app_label):
-        """
-        Does the user have permissions to view the app `app_label`?
-        Simplest possible answer: Yes, always
-        """
+        """Does the user have permissions to view the app `app_label`?"""
         return True
 
     @property
-    def is_admin(self):
-        """
-        Is the user a member of staff?
-        Simplest possible answer: All admins are staff
-        """
-        return self.is_staff
-    
-    
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
+
+
 class Profile(models.Model):
     """
     Profile model to store additional user information.

@@ -23,18 +23,24 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts.apps.AccountsConfig',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-    #Third-Party apps
-    
-    #Local apps
-    'home.apps.HomeConfig',
+    "accounts.apps.AccountsConfig",
+    "modeltranslation",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # Third-Party apps
+    "rest_framework",
+    "tinymce",
+    "taggit",
+    "django_social_share",
+    "meta",
+    "haystack",
+    # Local apps
+    "home.apps.HomeConfig",
+    "blog.apps.BlogConfig",
 ]
 
 
@@ -91,7 +97,6 @@ DATABASES = {
 }
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -113,12 +118,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
 
 LANGUAGES = [
     ("en", "English"),
     ("fr", "French"),
     ("sw", "Swahili"),
 ]
+MODELTRANSLATION_LANGUAGES = ("en", "sw", "fr")
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -126,7 +134,6 @@ TIME_ZONE = "Africa/Kampala"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 
 # Static files (CSS, JavaScript, Images)
