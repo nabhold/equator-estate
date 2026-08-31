@@ -1,0 +1,39 @@
+name: Equator Estate CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  django:
+    runs-on: ubuntu-26.04
+    container: ghcr.io/nabhold/baobab-dev:1.2.6
+    services:
+      postgres:
+        image: postgres:17.6-bookworm
+        env:
+          POSTGRES_DB: equator_estate
+          POSTGRES_USER: equator_estate
+          POSTGRES_PASSWORD: ci-only-password
+        options: >-
+          --health-cmd "pg_isready -U equator_estate"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SECRET_KEY: ci-only-not-for-production
+      DEBUG: "False"
+      DJANGO_SETTINGS_MODULE: nabhold.settings.development
+      POSTGRES_DB: equator_estate
+      POSTGRES_USER: equator_estate
+      POSTGRES_PASSWORD: ci-only-password
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      CELERY_BROKER_URL: memory://
+      CELERY_RESULT_BACKEND: cache+memory://
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: pip install --requirement requirements.txt
+      - run: python manage.py check
+      - run: python manage.py test
