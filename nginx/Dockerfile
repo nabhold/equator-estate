@@ -10,6 +10,10 @@ WORKDIR /etc/nginx
 # Remove the default Nginx configuration to prevent conflicts
 RUN rm /etc/nginx/conf.d/default.conf
 
+RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
+    touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx
+
 # Copy over the main nginx.conf and custom site configuration
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./custom-site.conf /etc/nginx/conf.d/custom-site.conf
@@ -24,11 +28,13 @@ COPY ./custom-site.conf /etc/nginx/conf.d/custom-site.conf
 # COPY ./media /app/media
 
 # Expose ports for HTTP and HTTPS
-EXPOSE 80 443
+EXPOSE 8080
 
 # Health check (uncomment if you want to use it)
 # Useful in orchestration tools like Docker Compose
 # HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl --fail http://localhost:80 || exit 1
 
 # Run Nginx in the foreground to keep the container running
+USER nginx
+
 CMD ["nginx", "-g", "daemon off;"]
