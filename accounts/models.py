@@ -34,12 +34,12 @@ class CustomUserManager(BaseUserManager):
         """
         Creates and saves a SuperUser with the given email and password.
         """
-        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_admin", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
 
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_admin") is not True:
+            raise ValueError("Superuser must have is_admin=True.")
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
@@ -113,7 +113,7 @@ class Profile(models.Model):
     date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}'s profile"
+        return f"{self.user.username}'s profile"
 
     def get_profile_image_url(self):
         """
