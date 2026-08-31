@@ -20,7 +20,9 @@ RUN mkdir -p /app && \
     adduser -u 5678 --disabled-password --gecos "" appuser && \
     chown -R appuser /app
 
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
@@ -35,16 +37,13 @@ RUN python -m pip install --no-cache-dir -r requirements.txt
 RUN python -m pip install --no-cache-dir python-decouple
 
 # Copy the entire app code to the container
-COPY . .
+COPY --chown=appuser:appuser . .
 
 # Copy wait-for-it.sh into the container
 COPY wait-for-it.sh /usr/local/bin/wait-for-it
 
 # Ensure it is executable
 RUN chmod +x /usr/local/bin/wait-for-it
-
-# Copy .env file to the container
-COPY .env .
 
 # Change to the non-root user
 USER appuser
