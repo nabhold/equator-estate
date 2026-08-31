@@ -27,7 +27,7 @@ jobs:
       POSTGRES_DB: equator_estate
       POSTGRES_USER: equator_estate
       POSTGRES_PASSWORD: ci-only-password
-      POSTGRES_HOST: postgres
+      POSTGRES_HOST: 127.0.0.1
       POSTGRES_PORT: "5432"
       CELERY_BROKER_URL: memory://
       CELERY_RESULT_BACKEND: cache+memory://
