@@ -11,6 +11,8 @@ jobs:
     services:
       postgres:
         image: postgres:17.6-bookworm
+        ports:
+          - 5432:5432
         env:
           POSTGRES_DB: equator_estate
           POSTGRES_USER: equator_estate
