@@ -8,7 +8,6 @@ permissions:
 jobs:
   django:
     runs-on: ubuntu-26.04
-    container: ghcr.io/nabhold/baobab-dev:1.2.6
     services:
       postgres:
         image: postgres:17.6-bookworm
@@ -34,6 +33,10 @@ jobs:
       CELERY_RESULT_BACKEND: cache+memory://
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@a309a8520f26b5d5b350f4c6006603dd4780c7c9 # v6.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
       - run: pip install --requirement requirements.txt
       - run: python manage.py check
       - run: python manage.py test
