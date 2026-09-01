@@ -18,7 +18,6 @@ class CustomUserFactory(DjangoModelFactory):
     last_name = factory.LazyAttribute(lambda _: fake.last_name())
     date_of_birth = factory.LazyAttribute(lambda _: fake.date_of_birth())
     is_active = True
-    is_staff = False
     is_admin = False
     date_joined = factory.LazyAttribute(lambda _: fake.date_time_this_decade())
 
@@ -30,9 +29,9 @@ class ProfileFactory(DjangoModelFactory):
         model = Profile
 
     user = factory.SubFactory(CustomUserFactory)
-    profile_image = factory.django.ImageField(color='blue')
+    profile_image = None
     bio = factory.LazyAttribute(lambda _: fake.paragraph(nb_sentences=3))
     phone_number = factory.LazyAttribute(lambda _: fake.phone_number())
     website = factory.LazyAttribute(lambda _: fake.url())
     address = factory.LazyAttribute(lambda _: fake.address())
-    date_of_birth = factory.LazyAttribute(lambda _: fake.date_of_birth())
+    date_of_birth = None
