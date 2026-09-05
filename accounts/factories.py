@@ -27,11 +27,19 @@ class ProfileFactory(DjangoModelFactory):
     """
     class Meta:
         model = Profile
+        # accounts.signals.create_or_update_user_profile already creates a
+        # Profile when the SubFactory below creates a new CustomUser, so a
+        # plain create() here would violate Profile.user's unique
+        # constraint. get_or_create fetches that row and updates it with
+        # the fields below instead of inserting a duplicate.
+        django_get_or_create = ("user",)
 
     user = factory.SubFactory(CustomUserFactory)
     profile_image = None
     bio = factory.LazyAttribute(lambda _: fake.paragraph(nb_sentences=3))
-    phone_number = factory.LazyAttribute(lambda _: fake.phone_number())
+    # Profile.phone_number is max_length=15; Faker's default phone_number()
+    # provider can exceed that (extensions, formatting), so truncate.
+    phone_number = factory.LazyAttribute(lambda _: fake.phone_number()[:15])
     website = factory.LazyAttribute(lambda _: fake.url())
     address = factory.LazyAttribute(lambda _: fake.address())
     date_of_birth = None
