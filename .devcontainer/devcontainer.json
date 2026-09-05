@@ -4,7 +4,7 @@
   "remoteUser": "vscode",
   "updateRemoteUserUID": true,
   "init": true,
-  "postCreateCommand": "if [ ! -f .env ]; then cp .env.example .env; fi && pip install -r requirements.txt && python manage.py check",
+  "postCreateCommand": "baobab-verify --contract && if [ ! -f .env ]; then cp .env.example .env; fi && pip install -r requirements.txt && python manage.py check",
   "customizations": {
     "vscode": {
       "extensions": ["github.vscode-github-actions", "redhat.vscode-yaml"]
